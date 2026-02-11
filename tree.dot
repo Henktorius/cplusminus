@@ -1,0 +1,15 @@
+digraph {
+n0 [label="Program:"];
+n1 [label="VolatileDeclaration:"];
+n2 [label="DeclarationAssign:"];
+n3 [label="Type:int"];
+n2 -> n3
+n4 [label="Assignment:"];
+n5 [label="Id:a"];
+n4 -> n5
+n6 [label="Id:10"];
+n4 -> n6
+n2 -> n4
+n1 -> n2
+n0 -> n1
+}
