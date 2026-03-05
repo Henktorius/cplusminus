@@ -1,1 +1,3 @@
 volatile int a =: 10
+a =: 1+1
+boolean test =: true
