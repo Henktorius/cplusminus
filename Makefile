@@ -46,7 +46,7 @@ $(TARGET_DIR):
 
 # Graphviz tree generation
 tree: 
-	dot -Tpdf tree.dot -o $(TARGET_DIR)/tree.pdf 
+	dot -Tpdf $(TARGET_DIR)/tree.dot -o $(TARGET_DIR)/tree.pdf 
 
 # Clean up
 clean:

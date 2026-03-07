@@ -32,7 +32,7 @@ public:
   
 	void generate_tree() {
 		std::ofstream outStream;
-		char* filename = "tree.dot";
+		char* filename = "target/tree.dot";
 	  	outStream.open(filename);
 
 		int count = 0;
