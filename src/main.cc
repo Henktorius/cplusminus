@@ -1,4 +1,8 @@
 #include <iostream>
+#include <fstream>
+#include "Node.h"
+#include "SymbolTable.h"
+#include "SemanticAnalyzer.h"
 #include "parser.tab.hh"
 
 extern Node *root;
@@ -49,6 +53,10 @@ int main(int argc, char **argv)
 	{
 		yy::parser parser;
 
+        cout << "\n╔══════════════════════════════════════════════════════════════╗\n";
+        cout <<   "║                     SYNTAX ANALYSIS                          ║\n";
+        cout <<   "╚══════════════════════════════════════════════════════════════╝\n";
+
 		bool parseSuccess = !parser.parse();
 
 		if (lexical_errors)
@@ -68,6 +76,26 @@ int main(int argc, char **argv)
 			{
 				errCode = errCodes::AST_ERROR;
 			}
+
+            SymbolTable st;
+            st.build(root);
+            st.print();
+
+            if (st.hasErrors()) {
+                std::cerr << "Symbol Table construction completed with errors";
+                    return 2;
+            }
+
+            SemanticAnalyzer analyzer(st);
+            
+            analyzer.analyze(root);
+
+            if (analyzer.hasErrors()) {
+                std::cerr << "\nSemantic analysis found " << analyzer.errorCount() << " error(s).\n";
+                return 3;
+            }
+
+            std::cout << "Semantic analysis passed with no errors.\n";
 		}
 	}
 

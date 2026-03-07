@@ -3,79 +3,49 @@ n0 [label="Program:"];
 n1 [label="VarDecls:"];
 n0 -> n1
 n2 [label="ClassDecls:"];
-n0 -> n2
-n3 [label="Entry:main"];
-n4 [label="Block:"];
-n5 [label="VarDecl:n"];
-n6 [label="Volatile:"];
+n3 [label="Class:StatementAfterReturn"];
+n4 [label="ClassBody:"];
+n5 [label="Method:getValue"];
+n6 [label="Params:"];
 n5 -> n6
 n7 [label="BaseType:int"];
 n5 -> n7
-n4 -> n5
-n8 [label="Read:"];
-n9 [label="Id:n"];
+n8 [label="Block:"];
+n9 [label="Assign:"];
+n10 [label="Id:value"];
+n9 -> n10
+n11 [label="IntLit:10"];
+n9 -> n11
 n8 -> n9
-n4 -> n8
-n10 [label="VarDecl:x"];
-n11 [label="Volatile:"];
-n10 -> n11
-n12 [label="BaseType:int"];
-n10 -> n12
-n13 [label="IntLit:1"];
-n10 -> n13
-n4 -> n10
-n14 [label="VarDecl:i"];
-n15 [label="Volatile:"];
+n12 [label="Return:"];
+n13 [label="Id:value"];
+n12 -> n13
+n8 -> n12
+n14 [label="Print:"];
+n15 [label="Id:value"];
 n14 -> n15
-n16 [label="BaseType:int"];
-n14 -> n16
-n17 [label="IntLit:2"];
-n14 -> n17
-n4 -> n14
-n18 [label="For:"];
-n19 [label="Assign:"];
-n20 [label="Id:i"];
-n19 -> n20
-n21 [label="IntLit:2"];
-n19 -> n21
-n18 -> n19
-n22 [label="BinOp:<="];
-n23 [label="Id:i"];
-n22 -> n23
-n24 [label="Id:n"];
-n22 -> n24
-n18 -> n22
-n25 [label="Assign:"];
-n26 [label="Id:i"];
-n25 -> n26
-n27 [label="BinOp:+"];
-n28 [label="Id:i"];
-n27 -> n28
-n29 [label="IntLit:1"];
-n27 -> n29
-n25 -> n27
-n18 -> n25
-n30 [label="Block:"];
-n31 [label="Assign:"];
-n32 [label="Id:x"];
-n31 -> n32
-n33 [label="BinOp:*"];
-n34 [label="Id:x"];
-n33 -> n34
-n35 [label="Id:i"];
-n33 -> n35
-n31 -> n33
-n30 -> n31
-n18 -> n30
-n4 -> n18
-n36 [label="Print:"];
-n37 [label="Id:x"];
-n36 -> n37
-n4 -> n36
-n38 [label="Return:"];
-n39 [label="IntLit:0"];
-n38 -> n39
-n4 -> n38
+n8 -> n14
+n5 -> n8
+n4 -> n5
 n3 -> n4
-n0 -> n3
+n2 -> n3
+n0 -> n2
+n16 [label="Entry:main"];
+n17 [label="Block:"];
+n18 [label="Print:"];
+n19 [label="MethodCall:getValue"];
+n20 [label="Call:StatementAfterReturn"];
+n21 [label="Args:"];
+n20 -> n21
+n19 -> n20
+n22 [label="Args:"];
+n19 -> n22
+n18 -> n19
+n17 -> n18
+n23 [label="Return:"];
+n24 [label="IntLit:0"];
+n23 -> n24
+n17 -> n23
+n16 -> n17
+n0 -> n16
 }

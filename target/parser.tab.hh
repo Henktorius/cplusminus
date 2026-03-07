@@ -32,7 +32,7 @@
 
 
 /**
- ** \file parser.tab.hh
+ ** \file target/parser.tab.hh
  ** Define the yy::parser class.
  */
 
@@ -42,16 +42,16 @@
 // especially those whose name start with YY_ or yy_.  They are
 // private implementation details that can be changed or removed.
 
-#ifndef YY_YY_PARSER_TAB_HH_INCLUDED
-# define YY_YY_PARSER_TAB_HH_INCLUDED
+#ifndef YY_YY_TARGET_PARSER_TAB_HH_INCLUDED
+# define YY_YY_TARGET_PARSER_TAB_HH_INCLUDED
 // "%code requires" blocks.
-#line 7 "parser.yy"
+#line 7 "src/parser.yy"
 
   #include <string>
   #include "Node.h"
   #define USE_LEX_ONLY false
 
-#line 55 "parser.tab.hh"
+#line 55 "target/parser.tab.hh"
 
 
 # include <cstdlib> // std::abort
@@ -186,7 +186,7 @@
 #endif
 
 namespace yy {
-#line 190 "parser.tab.hh"
+#line 190 "target/parser.tab.hh"
 
 
 
@@ -2413,9 +2413,9 @@ switch (yykind)
 
 
 } // yy
-#line 2417 "parser.tab.hh"
+#line 2417 "target/parser.tab.hh"
 
 
 
 
-#endif // !YY_YY_PARSER_TAB_HH_INCLUDED
+#endif // !YY_YY_TARGET_PARSER_TAB_HH_INCLUDED
