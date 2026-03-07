@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 
             if (st.hasErrors()) {
                 std::cerr << "Symbol Table construction completed with errors";
-                    return 2;
+                    return errCodes::SYNTAX_ERROR;
             }
 
             SemanticAnalyzer analyzer(st);
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 
             if (analyzer.hasErrors()) {
                 std::cerr << "\nSemantic analysis found " << analyzer.errorCount() << " error(s).\n";
-                return 3;
+                return errCodes::SEMANTIC_ERROR;
             }
 
             std::cout << "Semantic analysis passed with no errors.\n";

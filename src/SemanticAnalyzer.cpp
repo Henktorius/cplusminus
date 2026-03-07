@@ -308,6 +308,15 @@ void SemanticAnalyzer::visitVarDecl(Node* node) {
         }
     }
 
+    // Validate class types: every class-typed variable must name a class that
+    // is actually declared somewhere in the program.  Primitive types, array
+    // types, and the sentinel values "?" / "error" / "void" are exempt.
+    if (isClass(declaredType) && !findClassScope(declaredType)) {
+        error(node->lineno,
+              "Variable '" + node->value + "' is declared with unknown class type '"
+              + declaredType + "'; no such class exists.");
+    }
+
     // Check the initialiser expression (if present).
     if (it != node->children.end()) {
         Node* initExpr = *it;
@@ -564,6 +573,18 @@ string SemanticAnalyzer::typeOfId(Node* node) {
     if (!sym) {
         error(node->lineno,
               "Undeclared identifier '" + node->value + "'.");
+        return "error";
+    }
+    // Use-before-declaration: reject any reference to a variable or parameter
+    // whose VarDecl / parameter declaration appears later in the source than
+    // this usage site.  Methods and class names are hoisted, so they are exempt.
+    // A lineno of 0 on the symbol means it was synthesised (e.g. a built-in),
+    // and is also exempt.
+    if (sym->kind != SymbolKind::METHOD && sym->kind != SymbolKind::CLASS &&
+        sym->lineno > 0 && sym->lineno > node->lineno) {
+        error(node->lineno,
+              "Variable '" + node->value + "' is used before its declaration "
+              "(declared on line " + to_string(sym->lineno) + ").");
         return "error";
     }
     // Methods should be called via Call/MethodCall, not used as values.
