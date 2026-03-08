@@ -606,9 +606,12 @@ string SemanticAnalyzer::typeOfId(Node* node) {
 string SemanticAnalyzer::typeOfArrayAccess(Node* node) {
     auto it = node->children.begin();
     if (it == node->children.end()) return "error";
-    string arrType  = typeOf(*it++);
+    Node* arrNode = *it++;
     if (it == node->children.end()) return "error";
-    string idxType  = typeOf(*it);
+    Node* idxNode = *it;
+
+    string arrType = typeOf(arrNode);
+    string idxType = typeOf(idxNode);   // still evaluate for nested error reporting
 
     if (arrType == "error" || idxType == "error") return "error";
 
@@ -617,11 +620,25 @@ string SemanticAnalyzer::typeOfArrayAccess(Node* node) {
               "Array subscript applied to non-array type '" + arrType + "'.");
         return "error";
     }
-    if (idxType != "int") {
-        error(node->lineno,
-              "Array index must be 'int', got '" + idxType + "'.");
+
+    // Structural check: only IntLit, int-typed Id or class field are valid index forms.
+    bool validForm = (idxNode->type == "IntLit") ||
+                     (idxNode->type == "Id" && idxType == "int") ||
+                     (idxNode->type == "FieldAccess" && idxType == "int");
+
+    if (!validForm) {
+        // Produce a precise message depending on the kind of invalid index.
+        if (idxType != "int") {
+            error(node->lineno,
+                  "Array index must be of type 'int', got '" + idxType + "'.");
+        } else {
+            error(node->lineno,
+                  "Array index must be an int variable or an int literal, "
+                  "not a '" + idxNode->type + "' expression.");
+        }
         return "error";
     }
+
     return elementType(arrType);
 }
 

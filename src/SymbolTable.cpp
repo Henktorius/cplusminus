@@ -281,6 +281,15 @@ void SymbolTable::visitVarDecl(Node* node, bool isParam) {
     Node*  typeNode = getTypeNode(node);
     string varType  = typeNode ? resolveType(typeNode) : "?";
 
+    // If this is not itself a parameter declaration, make sure the name does
+    // not shadow a parameter of the enclosing method.  Shadowing a parameter
+    // is illegal in C+-.
+    if (!isParam) {
+        if (checkParamShadowing(node->value, node->lineno)) {
+            return;   // error already recorded; skip insertion
+        }
+    }
+
     declare(new Symbol(node->value, SymbolKind::VARIABLE, varType,
                        node->lineno, vol, isParam));
 }
@@ -379,4 +388,26 @@ Node* SymbolTable::getTypeNode(Node* varDecl) const {
 bool SymbolTable::isVolatile(Node* varDecl) const {
     return !varDecl->children.empty() &&
            varDecl->children.front()->type == "Volatile";
+}
+
+// Walk up from current_ until we hit a METHOD scope (or run out of scopes).
+// If that METHOD scope contains a *parameter* symbol with the given name,
+// return it so the caller can emit a meaningful diagnostic.
+Symbol* SymbolTable::checkParamShadowing(const string& name, int lineno) {
+    for (Scope* s = current_; s != nullptr; s = s->parent) {
+        if (s->kind == ScopeKind::METHOD) {
+            Symbol* sym = s->lookupLocal(name);
+            if (sym && sym->kind == SymbolKind::VARIABLE && sym->isParam) {
+                cerr << "[ST] Error (line " << lineno << "): '"
+                     << name << "' shadows parameter declared at line "
+                     << sym->lineno << " in method '" << s->name << "'.\n";
+                errors_ = true;
+                return sym;
+            }
+            // Stop searching once we reach a METHOD boundary – a param from
+            // an outer (unrelated) method is not in scope here anyway.
+            break;
+        }
+    }
+    return nullptr;
 }

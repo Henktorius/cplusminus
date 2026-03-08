@@ -124,6 +124,12 @@ private:
 
     // True when the first child of a VarDecl is the "Volatile" sentinel.
     bool   isVolatile(Node* varDecl) const;
+
+    // Walks up the scope chain from current_ and returns the Symbol* of a
+    // matching parameter declared in the nearest enclosing METHOD scope, or
+    // nullptr if no such parameter exists.  Used to reject local variables
+    // that would shadow a function parameter.
+    Symbol* checkParamShadowing(const string& name, int lineno);
 };
 
 #endif // SYMBOL_TABLE_H
